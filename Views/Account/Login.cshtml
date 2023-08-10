@@ -1,0 +1,49 @@
+﻿@model TurfManagement.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log In";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h1>Log In</h1>
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "account" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+
+                <div class="form-group">
+                    <label for="Input_Email" class="form-label">Email</label>
+                    <input id="Input_Email" name="Email" type="text" class="form-control" autocomplete="username" aria-required="true">
+                    <span class="text-danger" id="emailError"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Input_Password" class="form-label">Password</label>
+                    <input id="Input_Password" name="Password" type="password" class="form-control" autocomplete="off" aria-required="true">
+                    <span class="text-danger" id="emailError"></span>
+                </div>
+
+                <div>
+                    <button id="login-submit" type="submit" class="btn btn-primary mb-3">Log in</button>
+                </div>
+
+                <div>
+                    <p>
+                        <a id="forgot-password" href="@Url.Action("ForgotPassword", "Account")">Forgot your password?</a>
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Register", "Account")">Register as a new user</a>
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Js/Validation.js"></script>
+    }

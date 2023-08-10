@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h1>Register</h1>
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "account" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    <label for="Input_Name" class="form-label">Name</label>
+                    <input id="Input_Email" name="Name" type="text" class="form-control" aria-required="true">
+                    <span class="text-danger" id="nameError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Input_Age" class="form-label">Age</label>
+                    <input id="Input_Age" name="Age" type="text" class="form-control" aria-required="true">
+                    <span class="text-danger" id="ageError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Input_Place" class="form-label">Place</label>
+                    <input id="Input_Place" name="Place" type="text" class="form-control" aria-required="true">
+                    <span class="text-danger" id="placeError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Input_Email" class="form-label">Email</label>
+                    <input id="Input_Email" name="Email" type="text" class="form-control" autocomplete="username" aria-required="true">
+                    <span class="text-danger" id="emailError"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Input_Password" class="form-label">Password</label>
+                    <input id="Input_Password" name="Password" type="password" class="form-control" autocomplete="off" aria-required="true">
+                    <span class="text-danger" id="emailError"></span>
+                </div>
+
+                <div>
+                    <button id="register-submit" type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*@section scripts {
+    <script src="~/Js/Validation.js"></script>
+}*@
