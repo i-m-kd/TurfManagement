@@ -1,0 +1,52 @@
+﻿@model TurfManagement.Models.TurfModel
+@{
+    ViewBag.Title = "ListTurf";
+}
+
+<head>
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include other necessary scripts here -->
+    <script src="../scripts/jquery.validate.js"></script>
+    <script src="../scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="../scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="../scripts/jquery.validate.min.js"></script>
+</head>
+
+<h2>ListTurf</h2>
+
+<body>
+    @using (Html.BeginForm("ListTurf", "TurfController", FormMethod.Post))
+    {
+
+        //List Turfs
+        <select id="turfDropdown" class="form-control">
+            <option value="">Select Turf</option>
+            @foreach (var turf in Model.Turfs)
+            {
+                <option value="@turf.TurfID">@turf.TurfName</option>
+            }
+        </select>
+
+        <script>
+            var getSportsUrl = '@Url.Action("GetSports", "Turf")';
+        </script>
+
+        //List Sports Under The Turf Selected
+        <select id="sportDropdown" class="form-control mt-3">
+            <option value="">Select Sport</option>
+        </select>
+
+        <input type="submit" value="Submit" class="btn btn-primary mt-3" />
+
+    }
+    <script src="~/Js/TurfValidation.js"></script>
+
+</body>
+
+
+
+
+
+
+
