@@ -1,8 +1,8 @@
 ﻿@model TurfManagement.Models.TurfModel
-@{
-    ViewBag.Title = "ListTurf";
-}
 
+@{
+    ViewBag.Title = "List Turf";
+}
 <head>
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,37 +13,62 @@
     <script src="../scripts/jquery.validate.min.js"></script>
 </head>
 
-<h2>ListTurf</h2>
+<h2>List Turf</h2>
+
+<div class="alert alert-success" id="successMessage" style="display: none;">
+    Data saved successfully!
+</div>
+
+<div class="alert alert-danger" id="errorMessage" style="display: none;">
+    Error occurred while saving data.
+</div>
 
 <body>
     @using (Html.BeginForm("ListTurf", "TurfController", FormMethod.Post))
     {
+        <label for="date">Select Date:</label>
+        <input type="date" id="datePicker" class="form-control mb-3" />
 
-        //List Turfs
-        <select id="turfDropdown" class="form-control">
+        <label for="turfDropdown">Select Turf:</label>
+        <select id="turfDropdown" class="form-control mb-3">
             <option value="">Select Turf</option>
             @foreach (var turf in Model.Turfs)
             {
-                <option value="@turf.TurfID">@turf.TurfName</option>
+                <option value="@turf.TurfId">@turf.TurfName</option>
             }
         </select>
 
-        <script>
-            var getSportsUrl = '@Url.Action("GetSports", "Turf")';
-        </script>
+        <script>var getSportsUrl = '@Url.Action("GetSports", "Turf")';</script>
 
-        //List Sports Under The Turf Selected
-        <select id="sportDropdown" class="form-control mt-3">
+        <label for="sportDropdown">Select Sport :</label>
+        <select id="sportDropdown" class="form-control mb-3">
             <option value="">Select Sport</option>
         </select>
 
-        <input type="submit" value="Submit" class="btn btn-primary mt-3" />
+        <script>
+            var getAvailableTimeSlotsUrl = '@Url.Action("GetAvailableTimeSlots", "Turf")';
+        </script>
+
+        <script>
+            var bookTimeSlotUrl = '@Url.Action("BookTimeSlots", "Turf")';
+        </script>
+
+        <script>
+            var userId = @ViewBag.userId;
+        </script>
 
     }
-    <script src="~/Js/TurfValidation.js"></script>
+    <div id="timeSlotButtonsContainer" class="mt-3"> </div>
+
+    <div class="buttonContainer">
+        <button id="submitButton" class="btn btn-primary mt-3">Book Now</button>
+        <button type="button" class="btn btn-warning mt-3" id="clearButton">Clear</button>
+    </div>
+
 
 </body>
 
+<script src="~/Js/TurfValidation.js"></script>
 
 
 

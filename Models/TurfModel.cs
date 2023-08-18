@@ -9,7 +9,7 @@ namespace TurfManagement.Models
     {
         public List<TurfModel> Turfs { get; set; }
         public int SelectedTurfId { get; set; }
-        public int TurfID { get; set; }
+        public int TurfId { get; set; }
         public string TurfName { get; set; }
         public string Location { get; set; }
     }
@@ -22,15 +22,17 @@ namespace TurfManagement.Models
 
     public class SportModel
     {
-        public int SportID { get; set; }
+        public int SportId { get; set; }
         public string SportName { get; set; }
-        public int TurfID { get; set; }
+        public int TurfId { get; set; }
     }
 
     public class TimeSlotModel
     {
-        public int TimeSlotID { get; set; }
-        public int TurfID { get; set; }
+        public int TimeSlotId { get; set; }
+        public int TurfId { get; set; }
+        public int SportId { get; set; }
+        public DateTime SlotDate { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool IsBooked { get; set; }
@@ -38,9 +40,10 @@ namespace TurfManagement.Models
 
     public class BookingModel
     {
-        public int BookingID { get; set; }
-        public int TurfID { get; set; }
-        public int TimeSlotID { get; set; }
+        public int BookingId { get; set; }
+        public int TurfId { get; set; }
+        public int TimeSlotId { get; set; }
+        public int UserId { get; set; }
         public DateTime BookingDate { get; set; }
     }
 }
