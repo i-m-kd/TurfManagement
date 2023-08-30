@@ -1,0 +1,22 @@
+﻿@model TurfManagement.Models.SportModel
+
+
+@using (Html.BeginForm("AddSport", "Admin", FormMethod.Post))
+{
+    if (TempData["TurfId"] != null)
+    {
+        @Html.Hidden("TurfId", TempData["TurfId"])
+    }
+    <div class="form-group">
+        @Html.Label("Sport Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10 mb-2">
+            @Html.TextBoxFor(model => model.SportName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add Sport" class="btn btn-primary btn-sm" />
+        </div>
+    </div>
+}
+

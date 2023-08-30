@@ -12,6 +12,7 @@ namespace TurfManagement.Models
         public int TurfId { get; set; }
         public string TurfName { get; set; }
         public string Location { get; set; }
+        public string Description { get; set; }
     }
 
     public class TurfListViewModel

@@ -17,16 +17,36 @@ public class AccountController : Controller
     [HttpPost]
     public ActionResult Login(LoginModel model)
     {
-
-        if (ModelState.IsValid && userHelper.IsValidUser(model.Email, model.Password))
+        if (ModelState.IsValid)
         {
-            FormsAuthentication.SetAuthCookie(model.Email, false);
-            return RedirectToAction("Index", "Home");
+            if (userHelper.IsValidUser(model.Email, model.Password))
+            {
+                string userRole = userHelper.GetUserRole(model.Email);
+
+                if (userRole == "Admin")
+                {
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
+                    return RedirectToAction("Index", "Admin");
+                }
+                else if (userRole == "User")
+                {
+                    FormsAuthentication.SetAuthCookie(model.Email, false);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid user role");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid credentials");
+            }
         }
 
-        ModelState.AddModelError("", "Invalid credentials");
         return View(model);
     }
+
     public ActionResult Logout()
     {
         FormsAuthentication.SignOut();

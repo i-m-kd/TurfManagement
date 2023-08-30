@@ -1,0 +1,99 @@
+﻿@model TurfManagement.Models.TurfModel
+
+@{
+    ViewBag.Title = "Admin Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h3>Add Turf</h3>
+
+
+<!-- #region Info Message -->
+
+@if (TempData["TurfErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["TurfErrorMessage"]
+    </div>
+}
+
+@if (TempData["TurfSuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["TurfSuccessMessage"]
+    </div>
+}
+
+<!-- #endregion -->
+
+
+@using (Html.BeginForm("AddTurf", "Admin", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        @Html.Label("Turf Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.TurfName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Location, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Location, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+        <div class="col-md-10 mb-2">
+            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add Turf" class="btn btn-primary btn-sm" />
+        </div>
+    </div>
+}
+
+<!-- #region Info Message -->
+
+@if (TempData["SportErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["SportErrorMessage"]
+    </div>
+}
+
+@if (TempData["SportSuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SportSuccessMessage"]
+    </div>
+}
+
+<!-- #endregion -->
+
+<h3>Add Sport</h3>
+@{ Html.RenderPartial("_AddSport"); }
+
+
+<!-- #region Info Message -->
+
+@if (TempData["TimeslotErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["TimeslotErrorMessage"]
+    </div>
+}
+
+@if (TempData["TimeslotSuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["TimeslotSuccessMessage"]
+    </div>
+}
+
+<!-- #endregion -->
+
+<h3>Add Time Slot</h3>
+@{ Html.RenderPartial("_AddTimeSlot"); }
+

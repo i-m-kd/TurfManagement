@@ -152,10 +152,8 @@ namespace TurfManagement.ConnectionHelper
                 }
                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine($"Error occurred during booking: {ex.Message}");
-
                 _connection.Close();
                 return false; // Booking failed
             }
@@ -185,8 +183,6 @@ namespace TurfManagement.ConnectionHelper
                 }
             }
             _connection.Close();
-
-            Console.WriteLine($"Final UserId: {userId}");
 
             return userId; // User not found or error occurred
         }

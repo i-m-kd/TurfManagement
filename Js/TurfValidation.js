@@ -96,8 +96,6 @@
 
     // Book Now Button Click Event
     $("#submitButton").click(function () {
-        console.log("Button clicked!");
-        console.log("Selected time slot IDs:", selectedTimeSlots);//Remove this
         bookTimeSlot(selectedTimeSlots);
     });
 

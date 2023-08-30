@@ -9,49 +9,77 @@ namespace TurfManagement.ConnectionHelper
 {
     public class Helper
     {
-        private readonly SqlConnection _connection;
+        private readonly string connectionString;
+
         public Helper()
         {
-            _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DBConnection"].ToString());
+            connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ToString();
         }
 
         public bool IsValidUser(string email, string password)
         {
-            _connection.Open();
-
-            string query = "SELECT HashedPassword FROM Users WHERE Email = @Email";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                command.Parameters.AddWithValue("@Email", email);
+                connection.Open();
 
-                string hashedPassword = (string)command.ExecuteScalar();
-
-                if (hashedPassword != null)
+                string query = "SELECT HashedPassword FROM Users WHERE Email = @Email";
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+                    command.Parameters.AddWithValue("@Email", email);
+
+                    string hashedPassword = (string)command.ExecuteScalar();
+
+                    if (hashedPassword != null)
+                    {
+                        return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+                    }
                 }
             }
 
-            _connection.Close();
             return false;
         }
+
+        public string GetUserRole(string email)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT Role FROM Users WHERE Email = @Email";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", email);
+
+                    object role = command.ExecuteScalar();
+                    if (role != null)
+                    {
+                        return role.ToString();
+                    }
+                }
+            }
+
+            return null; // User not found or error occurred
+        }
+
         public void InsertUser(RegisterModel user)
         {
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                _connection.Open();
+                connection.Open();
 
-                string insertQuery = "INSERT INTO Users (Name, Age, Place, Email, HashedPassword) " +
-                                     "VALUES (@Name, @Age, @Place, @Email, @HashedPassword)";
+                string insertQuery = "INSERT INTO Users (Name, Age, Place, Email, HashedPassword, Role) " +
+                                     "VALUES (@Name, @Age, @Place, @Email, @HashedPassword, @Role)";
 
-                using (SqlCommand command = new SqlCommand(insertQuery, _connection))
+                using (SqlCommand command = new SqlCommand(insertQuery, connection))
                 {
                     command.Parameters.AddWithValue("@Name", user.Name);
                     command.Parameters.AddWithValue("@Age", user.Age);
                     command.Parameters.AddWithValue("@Place", user.Place);
                     command.Parameters.AddWithValue("@Email", user.Email);
                     command.Parameters.AddWithValue("@HashedPassword", hashedPassword);
+                    command.Parameters.AddWithValue("@Role", "User");
 
                     command.ExecuteNonQuery();
                 }
@@ -59,3 +87,4 @@ namespace TurfManagement.ConnectionHelper
         }
     }
 }
+
