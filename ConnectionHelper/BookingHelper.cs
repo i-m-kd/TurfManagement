@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
+using System.Web.Mvc;
 using TurfManagement.Models;
 
 namespace TurfManagement.ConnectionHelper
@@ -19,17 +21,40 @@ namespace TurfManagement.ConnectionHelper
             _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["DBConnection"].ToString());
         }
 
+        public List<string> GetTurfLocation()
+        {
+            List<string> turfLocations = new List<string>();
+            _connection.Open();
+            
+                using (SqlCommand command = new SqlCommand("GetLocation", _connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    using(SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            string location = (string)reader["Location"];
+                            turfLocations.Add(location);
+                        }
+                    }
+                }
+            _connection.Close();
+            return turfLocations;
+        }
         #region ListTurf
-        public List<TurfModel> GetTurf()
+        public List<TurfModel> GetTurf(string location)
         {
             _connection.Open();
 
-            string query = "SELECT Id, Name, Location FROM Turfs";
+            string query = "SELECT Id, Name FROM Turfs WHERE Location = @Location";
 
             List<TurfModel> turfs = new List<TurfModel>();
 
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (SqlCommand command = new SqlCommand("GetTurfByLocation", _connection))
             {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@Location", location);
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -38,7 +63,6 @@ namespace TurfManagement.ConnectionHelper
                         {
                             TurfId = (int)reader["Id"],
                             TurfName = (string)reader["Name"],
-                            Location = (string)reader["Location"]
                         };
                         turfs.Add(turf);
                     }
@@ -58,8 +82,9 @@ namespace TurfManagement.ConnectionHelper
 
             List<SportModel> sports = new List<SportModel>();
 
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (SqlCommand command = new SqlCommand("GetSports", _connection))
             {
+                command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@TurfID", turfId);
 
                 using (SqlDataReader reader = command.ExecuteReader())

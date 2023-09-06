@@ -116,6 +116,7 @@ namespace TurfManagement.ConnectionHelper
         }
         #endregion
 
+        #region AddTimeSlot
         public int AddTimeSlot(TimeSlotModel timeSlot)
         {
 
@@ -158,7 +159,24 @@ namespace TurfManagement.ConnectionHelper
                 }
             }
             return result;
-        }
+        } 
+        #endregion
 
+        //public List<BookingModel> GetBookings()
+        //{
+        //    List<BookingModel> bookings = new List<BookingModel>();
+
+        //    try
+        //    {
+        //        using (_connection)
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw new Exception("An error occurred while fetching bookings.");
+        //    }
+        //}
     }
 }

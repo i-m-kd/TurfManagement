@@ -215,11 +215,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Turf\ListTurf.cshtml" />
+    <Content Include="Views\Turf\BookTurf.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\_AddSport.cshtml" />
     <Content Include="Views\Admin\_AddTimeSlot.cshtml" />
+    <Content Include="Views\Turf\_ListTurf.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

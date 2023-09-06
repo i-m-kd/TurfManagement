@@ -34,7 +34,9 @@ namespace TurfManagement.ConnectionHelper
                         return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
                     }
                 }
+                connection.Close();
             }
+            
 
             return false;
         }
@@ -56,6 +58,7 @@ namespace TurfManagement.ConnectionHelper
                         return role.ToString();
                     }
                 }
+                connection.Close();
             }
 
             return null; // User not found or error occurred
@@ -83,6 +86,7 @@ namespace TurfManagement.ConnectionHelper
 
                     command.ExecuteNonQuery();
                 }
+                connection.Close ();
             }
         }
     }

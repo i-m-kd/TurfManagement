@@ -20,7 +20,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     @if (HttpContext.Current.User.Identity.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("BookTurf", "ListTurf", "Turf", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("BookTurf", "BookTurf", "Turf", new { area = "" }, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
 
                     }

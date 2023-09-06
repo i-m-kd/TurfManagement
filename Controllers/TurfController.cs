@@ -10,6 +10,7 @@ using TurfManagement.Models;
 
 namespace TurfManagement.Controllers
 {
+   
     [Authorize]
     public class TurfController : Controller
     {
@@ -20,23 +21,36 @@ namespace TurfManagement.Controllers
             _bookingHelper = new BookingHelper();
         }
 
-        #region ListTurfName
-        public ActionResult ListTurf()
+        [HttpGet]
+        public ActionResult BookTurf()
         {
-            List<TurfModel> turfs = _bookingHelper.GetTurf();
+            List<string> places = _bookingHelper.GetTurfLocation();
+            ViewBag.Locations = places;
 
-            TurfModel turfView = new TurfModel
-            {
-                Turfs = turfs,
-                SelectedTurfId = 0
-            };
             string userEmail = User.Identity.Name;
             int userId = _bookingHelper.GetUserIdByEmail(userEmail);
 
             ViewBag.UserId = userId;
-            return View(turfView);
+            return View();
         }
-        #endregion
+     
+        public ActionResult ListTurf(string selectedLocation)
+        {
+            List<TurfModel> turfs = _bookingHelper.GetTurf(selectedLocation);
+
+            return Json(turfs, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+        [HttpPost]
+        public ActionResult SubmitTurf(TurfModel model)
+        {
+            int SelectedTurfId = model.SelectedTurfId;
+            return View(model);
+        }
+
 
         [HttpPost]
         public ActionResult ListTurf(TurfModel model)
@@ -55,8 +69,6 @@ namespace TurfManagement.Controllers
         [HttpGet]
         public ActionResult GetAvailableTimeSlots(int turfId, int sportId, DateTime date)
         {
-            Debug.WriteLine($"GetAvailableTimeSlots called with turfId: {turfId}, sportId: {sportId}");
-
             List<TimeSlotModel> timeSlots = _bookingHelper.GetAvailableTimeSlots(turfId, sportId,date);
             return Json(timeSlots, JsonRequestBehavior.AllowGet);
         }

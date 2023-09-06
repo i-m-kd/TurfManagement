@@ -1,9 +1,59 @@
-﻿$(document).ready(function () {
-    var selectedTimeSlots = [];
-    var selectedTurfId;
-    var sportsData = {}; 
-    var selectedDate;
-    // Turf Dropdown Change Event
+﻿
+$(document).ready(function () {
+     $.ajax({
+         url: '@Url.Action("BookTurf", "Turf")',
+         type: 'GET',
+         success: function (data) {
+             var locationDropdown = $("#locationDropdown");
+             locationDropdown.empty(); 
+             locationDropdown.append($('<option>').val('').text('Select Location')); 
+             $.each(data, function (index, location) {
+                 locationDropdown.append($('<option>').val(location).text(location));
+             });
+         },
+         error: function () {
+             console.error('Error occurred while fetching location data.');
+         }
+     });
+
+    $("#locationDropdown").on('change', function () {
+        var selectedLocation = $(this).val();
+
+        // Check if a location is selected
+        if (selectedLocation) {
+            // Make an AJAX request to fetch the turfs
+            $.ajax({
+                type: "GET",
+                url: getTurfsUrl,
+                data: { selectedLocation: selectedLocation },
+                dataType: 'json',
+                success: function (data) {
+                    var turfDropdown = $("#turfDropdown");
+                    turfDropdown.empty(); // Clear existing options
+                    turfDropdown.append($('<option>').val('').text('Select Turf')); // Add default option
+
+                    // Populate the Turf dropdown with data from the AJAX response
+                    $.each(data, function (index, turf) {
+                        turfDropdown.append($('<option>').val(turf.TurfId).text(turf.TurfName));
+                    });
+
+                    // Enable the Turf dropdown
+                    turfDropdown.prop("disabled", false);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        } else {
+            // If no location is selected, clear and disable the Turf dropdown
+            var turfDropdown = $("#turfDropdown");
+            turfDropdown.empty(); // Clear existing options
+            turfDropdown.prop("disabled", true); // Disable the Turf dropdown
+        }
+    });
+});
+
+
     $("#turfDropdown").change(function () {
         selectedTurfId = $(this).val();
         var sportDropdown = $("#sportDropdown");
@@ -38,7 +88,7 @@
             sportDropdown.empty();
         }
     });
-
+var selectedTimeSlots = [];
     // Sport Dropdown Change Event
     $("#sportDropdown").change(function () {
         var selectedSportId = $(this).val();
@@ -66,14 +116,11 @@
                             value: timeSlot.TimeSlotId,
                             text: startTimeFormatted + ' - ' + endTimeFormatted,
                             click: function () {
-                                console.log("Button clicked for time slot ID:", timeSlot.TimeSlotId);
                                 if (selectedTimeSlots.includes(timeSlot.TimeSlotId)) {
                                     // Unbook time slot
-                                    console.log("Removing time slot ID from selectedTimeSlots:", timeSlot.TimeSlotId);
                                     selectedTimeSlots = selectedTimeSlots.filter(id => id !== timeSlot.TimeSlotId);
                                     button.removeClass('btn-success').addClass('btn-primary');
                                 } else {
-                                    console.log("Adding time slot ID to selectedTimeSlots:", timeSlot.TimeSlotId);
                                     // Book time slot
                                     selectedTimeSlots.push(timeSlot.TimeSlotId);
                                     button.removeClass('btn-primary').addClass('btn-success');
@@ -94,10 +141,7 @@
         }
     });
 
-    // Book Now Button Click Event
-    $("#submitButton").click(function () {
-        bookTimeSlot(selectedTimeSlots);
-    });
+    
 
     function bookTimeSlot(timeSlotIds) {
         $.ajax({
@@ -107,16 +151,13 @@
             traditional: true, // This is important to properly format the array parameter
             success: function (data) {
                 if (data.success) {
-                    console.log("Booking Successful");
                     $("#successMessage").show(); // Show success message
                     clearPage(); // Clear page after successful booking
                 } else {
-                    console.log("Booking Failed");
                     $("#errorMessage").show(); // Show error message
                 }
             },
             error: function () {
-                console.log('An error occurred while booking the time slot.');
                 $("#errorMessage").show();
             }
         });
@@ -128,9 +169,12 @@
         selectedDate = undefined;
         sportsData = {};
 
-        $("#turfDropdown").val("");
-        $("#sportDropdown").empty().append('<option value="">Select Sport</option>');
         $("#datePicker").val("");
+        $("#locationDropdown").val("");
+
+        $("#sportDropdown").empty().append('<option value="">Select Sport</option>');
+        $("#turfDropdown").empty().append('<option value="">Select Turf</option>');
+        
 
         $("#timeSlotButtonsContainer").empty();
 
@@ -142,16 +186,21 @@
         selectedDate = undefined;
         sportsData = {};
 
-        $("#turfDropdown").val("");
-        $("#sportDropdown").empty().append('<option value="">Select Sport</option>');
+        $("#locationDropdown").val("");
         $("#datePicker").val("");
+        $("#sportDropdown").empty().append('<option value="">Select Sport</option>');
+        $("#locationDropdown").empty().append('<option value="">Select Location</option>');
 
         $("#timeSlotButtonsContainer").empty();
-    }
+}
 
+    // Book Now Button Click Event
+$("#submitButton").click(function () {
+    bookTimeSlot(selectedTimeSlots);
+});
     // Clear Button Click Event
     $("#clearButton").click(function () {
         resetPage();
     });
 
-});
+   

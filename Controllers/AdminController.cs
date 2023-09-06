@@ -38,7 +38,7 @@ namespace TurfManagement.Controllers
             }
             else
             {
-                TempData["TurfErrorMessage"] = "An error occurred while adding the turf.";
+                TempData["TurfErrorMessage"] = "An error occurred while adding the turf !";
             }
 
             return RedirectToAction("Index");
